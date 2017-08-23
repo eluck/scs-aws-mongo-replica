@@ -1,0 +1,9 @@
+{
+  "name": "scs-aws-mongo-replica",
+  "version": "0.0.1",
+  "description": "**scs-aws-mongo-replica** is a setup creating secure mongodb replica set in AWS. This project is part of **[Simple cloud stack](https://github.com/eluck/simple-cloud-stack)** initiative.",
+  "main": "index.js",
+  "repository": "git@github.com:eluck/scs-aws-mongo-replica.git",
+  "author": "Evgeny Lukianchikov <mail@eluck.me>",
+  "license": "MIT"
+}
