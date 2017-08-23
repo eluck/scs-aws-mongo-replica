@@ -1,3 +1,8 @@
+### Status
+
+In development, doesn't work yet
+
+
 ### About
 
 **scs-aws-mongo-replica** is a setup creating secure mongodb replica set in AWS. This project is part of **[Simple cloud stack](https://github.com/eluck/simple-cloud-stack)** initiative.
