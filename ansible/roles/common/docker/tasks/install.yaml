@@ -1,0 +1,112 @@
+- name: install pip
+  apt:
+    name: python-pip
+    state: present
+    update_cache: true
+  when: ansible_distribution == "Ubuntu"
+  register: apt_pip  
+  tags:
+  - docker
+
+
+- name: update pip
+  pip:
+    name: 
+      - pip
+      - setuptools
+    state: latest
+  register: pip_upd
+  tags:
+  - docker
+
+
+- name: Install Docker-Ansible connector
+  pip: 
+    name: 
+      - docker-py==1.10.6
+      - docker-compose==1.9.0
+    state: present
+  register: docker_py
+  tags:
+   - docker
+
+
+- name: Install packages HTTPS with APT
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+  register: apt_prereq
+  tags:
+   - docker
+
+
+- name: Add key for Docker repo
+  apt_key: 
+    keyserver: hkp://p80.pool.sks-keyservers.net:80
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+    state: present
+  when: ansible_distribution == "Ubuntu"
+  register: apt_key
+  tags:
+  - docker
+
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_lsb.codename }} main"
+    state: present
+  register: apt_repo
+  when: ansible_distribution == "Ubuntu"
+  tags:
+  - docker
+
+
+- name: install Docker
+  apt: 
+    pkg: docker-engine=17.05.0~ce-0~ubuntu-{{ ansible_lsb.codename }}
+    state: present
+    update_cache: true
+  when: ansible_distribution ==  "Ubuntu"
+  register: apt_dock
+  tags:
+  - docker
+
+
+- name: Add default user to docker group
+  user:
+    name: ubuntu
+    groups: docker
+    append: yes
+  register: add_u
+  tags:
+  - docker
+
+
+- name: Reboot system if required
+  shell: reboot
+  args:
+    removes: /var/run/reboot-required
+  async: 1
+  poll: 0
+  ignore_errors: true
+  register: rebooting
+  tags:
+   - docker
+
+
+- name: wait for server to come back
+  connection: local
+  become: no
+  wait_for:
+    host: "{{ ansible_ssh_host }}"
+    state: started
+    delay: 5
+    timeout: 60
+  when: rebooting.changed
+  tags:
+   - docker

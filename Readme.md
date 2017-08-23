@@ -11,11 +11,16 @@ The current version of the project is intended to be launched on Mac OS X only. 
 ```yarn add scs-aws-mongo-replica```
 
 
-2. Initialize tooling by running command below and following instructions. *Warning: this step will download and install Hashicorp Ansible and Terraform tools on your Mac*
+2. Initialize tooling by running command below and following instructions. *Warning: this step will download and install Hashicorp Ansible and Terraform tools on your Mac*.
 
 ```yarn run scs-aws-mongo-replica```
 
 
-3. Set up mongo replica set by running
+3. Generate Ansible and Terraform scripts for your setup. It is recommended to store the scripts in git alongside the project.
 
-```yarn run scs-aws-mongo-replica setup```
+```yarn run scs-aws-mongo-replica generate```
+
+
+4. Apply Ansible and Terraform scripts to create mongo replica set.
+
+```yarn run scs-aws-mongo-replica apply```

@@ -1,0 +1,16 @@
+---
+- name: check docker installed
+  shell: apt -qq list docker-engine
+  register: apt_check
+  tags:
+  - docker
+
+- name: Display all variables/facts known for a task
+  debug: msg="{{ apt_check }}"
+  tags:
+  - docker
+
+- include: install.yaml
+  when: "'17.05.0' not in apt_check.stdout and 'installed' not in apt_check.stdout"
+  tags:
+  - docker

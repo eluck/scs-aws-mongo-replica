@@ -1,0 +1,6 @@
+---
+- name: copy script for replica set initialization
+  template: src=init-rs.j2 dest=/tmp/init-rs.js
+
+- name: initiate replica set from first primary
+  shell: docker exec -i mongo mongo < /tmp/init-rs.js

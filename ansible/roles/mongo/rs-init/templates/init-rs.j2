@@ -1,0 +1,6 @@
+use admin
+rs.initiate({_id: "{{ env_prefix }}RS", members: [
+  { _id: 0, host: "{{ groups['tag_mongodb_rs_role_primary'][0] }}:27017", priority: 10 },
+  { _id: 1, host: "{{ groups['tag_mongodb_rs_role_secondary'][0] }}:27017", priority: 1 },
+  { _id: 2, host: "{{ groups['tag_mongodb_rs_role_arbiter'][0] }}:27017", arbiterOnly: true }
+]});

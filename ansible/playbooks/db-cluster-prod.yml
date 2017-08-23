@@ -1,0 +1,38 @@
+---
+- name: Playbook for installing common prerequisites
+  hosts: tag_terraformed_true
+  remote_user: ubuntu
+  become: yes
+  gather_facts: False
+  pre_tasks:
+    - name: Install Python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      register: output
+      changed_when: output.stdout != ""
+    - setup: # aka gather_facts
+  roles:
+    - common/docker
+
+
+- name: Playbook for installing mongodb
+  hosts: tag_host_role_mongodb
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - mongo/mongodb
+
+
+- name: Playbook for initializing replica set
+  hosts: tag_mongodb_rs_role_primary
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - mongo/rs-init
+
+
+- name: Playbook for starting mms agents
+  hosts: tag_host_role_mms
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - mongo/mms
